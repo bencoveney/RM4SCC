@@ -1,5 +1,6 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
+import { Barcode } from "./barcode";
 
 export function initApp() {
   const rootElement = document.getElementById("react-root");
@@ -7,5 +8,7 @@ export function initApp() {
     throw new Error("No root element");
   }
   const root = createRoot(rootElement);
-  root.render(<div>Barcodes</div>);
+  const postcode = "BX11LT";
+  const deliveryPointSuffix = "1A";
+  root.render(<Barcode barcode={`${postcode}${deliveryPointSuffix}`} />);
 }
