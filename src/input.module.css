@@ -1,0 +1,38 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+}
+
+.legend {
+  font-weight: bold;
+  color: #174b4b;
+  margin-bottom: 0.5rem;
+}
+
+.row {
+  margin-top: 0.5rem;
+  display: flex;
+}
+
+.split {
+  justify-content: space-between;
+}
+
+.label {
+}
+
+.field {
+}
+
+.note {
+  display: block;
+  font-style: italic;
+  color: #174b4b;
+  margin-bottom: 0.5rem;
+}

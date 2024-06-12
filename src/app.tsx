@@ -4,6 +4,8 @@ import { Barcode } from "./barcode";
 import { Input } from "./input";
 import { Barcode as BarcodeType } from "./rm4scc";
 
+import classes from "./app.module.css";
+
 export function initApp() {
   const rootElement = document.getElementById("react-root");
   if (!rootElement) {
@@ -16,9 +18,13 @@ export function initApp() {
 function App() {
   const [barcode, setBarcode] = useState<BarcodeType>([]);
   return (
-    <>
-      <Input setValue={setBarcode} />
-      <Barcode barcode={barcode} />
-    </>
+    <div className={classes.wrapper}>
+      <div className={classes.controls}>
+        <Input setValue={setBarcode} />
+      </div>
+      <div className={classes.preview}>
+        <Barcode barcode={barcode} />
+      </div>
+    </div>
   );
 }

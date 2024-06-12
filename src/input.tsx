@@ -8,6 +8,8 @@ import React, {
 } from "react";
 import { Barcode, buildBarcode } from "./rm4scc";
 
+import classes from "./input.module.css";
+
 const modePostcodeDps = "PostcodeDPS";
 const modePostcode = "Postcode";
 const modeArbitrary = "Arbitrary";
@@ -35,7 +37,7 @@ export function Input({ setValue }: { setValue: (value: Barcode) => void }) {
         input = `${postcode.value}${deliveryPointSuffix.value}`;
         break;
       case modePostcode:
-        input = `${postcode.value}`;
+        input = `${postcode.value}9Z`;
         break;
       case modeArbitrary:
         input = `${arbitrary.value}`;
@@ -53,7 +55,7 @@ export function Input({ setValue }: { setValue: (value: Barcode) => void }) {
   ]);
 
   return (
-    <form>
+    <form className={classes.form}>
       <FieldGroup label="Preset">
         <button>Sample Postcode</button>
         <button>Ben</button>
@@ -67,13 +69,27 @@ export function Input({ setValue }: { setValue: (value: Barcode) => void }) {
         <Labeled label="Arbitrary Data">{mode.elements[modeArbitrary]}</Labeled>
       </FieldGroup>
       <FieldGroup label="Input">
-        <Labeled label="Postcode">{postcode.element}</Labeled>
-        <Labeled label="DPS">{deliveryPointSuffix.element}</Labeled>
-        <Labeled label="Value">{arbitrary.element}</Labeled>
+        {mode.value === modePostcodeDps && (
+          <>
+            <Labeled label="Postcode">{postcode.element}</Labeled>
+            <Labeled label="DPS">{deliveryPointSuffix.element}</Labeled>
+          </>
+        )}
+        {mode.value === modePostcode && (
+          <>
+            <Labeled label="Postcode">{postcode.element}</Labeled>
+            <Note>A default DPS code of 9Z will be used</Note>
+          </>
+        )}
+        {mode.value === modeArbitrary && (
+          <Labeled label="Value">{arbitrary.element}</Labeled>
+        )}
       </FieldGroup>
       <FieldGroup label="Include">
         <Labeled label="Include Terminators">{terminators.element}</Labeled>
+        <Note>Include the leading and trailing special characters</Note>
         <Labeled label="Include Checksum">{checksum.element}</Labeled>
+        <Note>Include a checksum of the input value</Note>
       </FieldGroup>
     </form>
   );
@@ -81,8 +97,8 @@ export function Input({ setValue }: { setValue: (value: Barcode) => void }) {
 
 function FieldGroup({ children, label }: PropsWithChildren<{ label: string }>) {
   return (
-    <fieldset>
-      <legend>{label}</legend>
+    <fieldset className={classes.group}>
+      <legend className={classes.legend}>{label}</legend>
       {children}
     </fieldset>
   );
@@ -90,8 +106,8 @@ function FieldGroup({ children, label }: PropsWithChildren<{ label: string }>) {
 
 function Labeled({ children, label }: PropsWithChildren<{ label: string }>) {
   return (
-    <label>
-      {label}
+    <label className={`${classes.row} ${classes.split}`}>
+      <span className={classes.label}>{label}</span>
       {children}
     </label>
   );
@@ -181,4 +197,8 @@ function useRadioButtons({
   });
 
   return { elements, value };
+}
+
+function Note({ children }: PropsWithChildren) {
+  return <p className={`${classes.row} ${classes.note}`}>{children}</p>;
 }
