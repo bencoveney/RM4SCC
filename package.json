@@ -1,0 +1,18 @@
+{
+  "name": "rm4scc",
+  "description": "RM4SCC barcodes",
+  "scripts": {
+    "build": "esbuild src/index.ts --bundle --minify --sourcemap --outdir=build/dist",
+    "dev": "esbuild src/index.ts --bundle --outdir=build/dist --servedir=build"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "esbuild": "^0.21.3"
+  },
+  "type": "module",
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  }
+}
