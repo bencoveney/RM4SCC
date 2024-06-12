@@ -15,19 +15,35 @@ const modePostcode = "Postcode";
 const modeArbitrary = "Arbitrary";
 const modes = [modePostcodeDps, modePostcode, modeArbitrary];
 
+type Preset = {
+  name: string;
+  mode: string;
+  postcode: string;
+  dps: string;
+  arbitrary: string;
+  terminators: boolean;
+  checksum: boolean;
+};
+
 export function Input({ setValue }: { setValue: (value: Barcode) => void }) {
+  const preset = usePresetButtons();
+
   const mode = useRadioButtons({
     name: "mode",
     values: modes,
-    defaultValue: modes[0],
+    defaultValue: preset.defaults.mode,
   });
 
-  const postcode = useTextInput({ defaultValue: "BX11LT" });
-  const deliveryPointSuffix = useTextInput({ defaultValue: "1A" });
-  const arbitrary = useTextInput({ defaultValue: "Ben" });
+  const postcode = useTextInput({ defaultValue: preset.defaults.postcode });
+  const deliveryPointSuffix = useTextInput({
+    defaultValue: preset.defaults.dps,
+  });
+  const arbitrary = useTextInput({ defaultValue: preset.defaults.arbitrary });
 
-  const terminators = useCheckbox({ defaultChecked: true });
-  const checksum = useCheckbox({ defaultChecked: true });
+  const terminators = useCheckbox({
+    defaultChecked: preset.defaults.terminators,
+  });
+  const checksum = useCheckbox({ defaultChecked: preset.defaults.checksum });
 
   useEffect(() => {
     let input = "";
@@ -56,11 +72,7 @@ export function Input({ setValue }: { setValue: (value: Barcode) => void }) {
 
   return (
     <form className={classes.form}>
-      <FieldGroup label="Preset">
-        <button>Sample Postcode</button>
-        <button>Ben</button>
-        <button>Empty</button>
-      </FieldGroup>
+      <FieldGroup label="Preset">{preset.element}</FieldGroup>
       <FieldGroup label="Input Mode">
         <Labeled label="Postcode and DPS">
           {mode.elements[modePostcodeDps]}
@@ -85,7 +97,8 @@ export function Input({ setValue }: { setValue: (value: Barcode) => void }) {
           <Labeled label="Value">{arbitrary.element}</Labeled>
         )}
       </FieldGroup>
-      <FieldGroup label="Include">
+      <FieldGroup label="Extras">
+        <Note>Required for a valid barcode</Note>
         <Labeled label="Include Terminators">{terminators.element}</Labeled>
         <Note>Include the leading and trailing special characters</Note>
         <Labeled label="Include Checksum">{checksum.element}</Labeled>
@@ -128,13 +141,7 @@ function useCheckbox({ defaultChecked }: { defaultChecked: boolean }) {
   );
 
   return {
-    element: (
-      <input
-        type="checkbox"
-        defaultChecked={defaultChecked}
-        onChange={onChange}
-      />
-    ),
+    element: <input type="checkbox" checked={checked} onChange={onChange} />,
     checked,
   };
 }
@@ -154,9 +161,7 @@ function useTextInput({ defaultValue }: { defaultValue: string }) {
   );
 
   return {
-    element: (
-      <input type="text" onChange={onChange} defaultValue={defaultValue} />
-    ),
+    element: <input type="text" onChange={onChange} value={value} />,
     value: value,
   };
 }
@@ -190,7 +195,7 @@ function useRadioButtons({
         type="radio"
         name={name}
         value={valueName}
-        defaultChecked={valueName === defaultValue}
+        checked={valueName === value}
         onChange={onChange}
       />
     );
@@ -201,4 +206,72 @@ function useRadioButtons({
 
 function Note({ children }: PropsWithChildren) {
   return <p className={`${classes.row} ${classes.note}`}>{children}</p>;
+}
+
+const postcodePreset: Preset = {
+  name: "Sample Postcode",
+  mode: modePostcodeDps,
+  postcode: "BX11LT",
+  dps: "1A",
+  arbitrary: "",
+  terminators: true,
+  checksum: true,
+};
+
+const benPreset: Preset = {
+  name: "Ben",
+  mode: modeArbitrary,
+  postcode: "",
+  dps: "",
+  arbitrary: "Ben",
+  terminators: false,
+  checksum: false,
+};
+
+const emptyPreset: Preset = {
+  name: "Empty",
+  mode: modeArbitrary,
+  postcode: "",
+  dps: "",
+  arbitrary: "",
+  terminators: false,
+  checksum: false,
+};
+
+function usePresetButtons() {
+  const [defaults, setDefaults] = useState<Preset>(postcodePreset);
+  return {
+    element: (
+      <div className={`${classes.row} ${classes.buttons}`}>
+        <button
+          className={classes.button}
+          onClick={(event) => {
+            event.preventDefault();
+            setDefaults(postcodePreset);
+          }}
+        >
+          {postcodePreset.name}
+        </button>
+        <button
+          className={classes.button}
+          onClick={(event) => {
+            event.preventDefault();
+            setDefaults(benPreset);
+          }}
+        >
+          {benPreset.name}
+        </button>
+        <button
+          className={classes.button}
+          onClick={(event) => {
+            event.preventDefault();
+            setDefaults(emptyPreset);
+          }}
+        >
+          {emptyPreset.name}
+        </button>
+      </div>
+    ),
+    defaults,
+  };
 }

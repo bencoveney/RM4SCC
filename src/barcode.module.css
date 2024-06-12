@@ -1,33 +1,37 @@
 .barcode {
+  max-width: 100%;
   display: flex;
-  gap: 0.1rem;
+  --barcode-gap: 0.25rem;
+  --barcode-height: 3rem;
+  --barcode-width: 0.5rem;
+  gap: var(--barcode-gap);
 }
 
 .bar {
   background-color: black;
-  width: 0.25rem;
+  width: var(--barcode-width);
 }
 
 .short {
-  height: 1rem;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+  height: var(--barcode-height);
+  margin-top: var(--barcode-height);
+  margin-bottom: var(--barcode-height);
 }
 
 .up {
-  height: 2rem;
+  height: calc(--barcode-height * 2);
   margin-top: 0;
-  margin-bottom: 1rem;
+  margin-bottom: var(--barcode-height);
 }
 
 .down {
-  height: 2rem;
-  margin-top: 1rem;
+  height: calc(--barcode-height * 2);
+  margin-top: var(--barcode-height);
   margin-bottom: 0;
 }
 
 .long {
-  height: 3rem;
+  height: calc(--barcode-height * 3);
   margin-top: 0;
   margin-bottom: 0;
 }

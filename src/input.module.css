@@ -36,3 +36,16 @@
   color: #174b4b;
   margin-bottom: 0.5rem;
 }
+
+.buttons {
+  justify-content: space-evenly;
+}
+
+.button {
+  font-weight: bold;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: #174b4b;
+  color: #ffffff;
+  border: 0;
+}
