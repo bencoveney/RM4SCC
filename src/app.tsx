@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { createRoot } from "react-dom/client";
 import { Barcode } from "./barcode";
+import { Input } from "./input";
+import { Barcode as BarcodeType } from "./rm4scc";
 
 export function initApp() {
   const rootElement = document.getElementById("react-root");
@@ -8,7 +10,15 @@ export function initApp() {
     throw new Error("No root element");
   }
   const root = createRoot(rootElement);
-  const postcode = "BX11LT";
-  const deliveryPointSuffix = "1A";
-  root.render(<Barcode barcode={`${postcode}${deliveryPointSuffix}`} />);
+  root.render(<App />);
+}
+
+function App() {
+  const [barcode, setBarcode] = useState<BarcodeType>([]);
+  return (
+    <>
+      <Input setValue={setBarcode} />
+      <Barcode barcode={barcode} />
+    </>
+  );
 }

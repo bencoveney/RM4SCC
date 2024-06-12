@@ -5,6 +5,8 @@ export const enum Bar {
   LONG = "LONG",
 }
 
+export type Barcode = Bar[];
+
 export type RegularCharacter = [Bar, Bar, Bar, Bar];
 
 export const regularCharacterMap: Record<string, RegularCharacter> = {
@@ -143,7 +145,7 @@ export function checksum(characters: RegularCharacter[]): RegularCharacter {
   ];
 }
 
-export function buildBarcode(input: string): Bar[] {
+export function buildBarcode(input: string): Barcode {
   const characters = input.split("").map((char) => {
     const found = regularCharacterMap[char.toUpperCase()];
     if (!found) {
