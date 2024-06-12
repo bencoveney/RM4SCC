@@ -145,7 +145,11 @@ export function checksum(characters: RegularCharacter[]): RegularCharacter {
   ];
 }
 
-export function buildBarcode(input: string): Barcode {
+export function buildBarcode(
+  input: string,
+  includeTerminators: boolean,
+  includeChecksum: boolean
+): Barcode {
   const characters = input.split("").map((char) => {
     const found = regularCharacterMap[char.toUpperCase()];
     if (!found) {
@@ -154,10 +158,10 @@ export function buildBarcode(input: string): Barcode {
     return found;
   });
   return [
-    specialCharacterMap[SpecialCharacters.START],
+    includeTerminators ? specialCharacterMap[SpecialCharacters.START] : [],
     ...characters,
-    checksum(characters),
-    specialCharacterMap[SpecialCharacters.STOP],
+    includeChecksum ? checksum(characters) : [],
+    includeTerminators ? specialCharacterMap[SpecialCharacters.STOP] : [],
   ].flat();
 }
 
@@ -227,7 +231,7 @@ DOWN
 LONG
 LONG`;
 
-  const sample = buildBarcode(sampleInput).join("\n");
+  const sample = buildBarcode(sampleInput, true, true).join("\n");
   if (sample !== sampleOutput) {
     throw new Error("Sample was not valid");
   }
