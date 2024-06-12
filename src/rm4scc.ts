@@ -85,19 +85,15 @@ export function barBottomValue(bar: Bar): 0 | 1 {
 export const weights = [4, 2, 1, 0];
 
 export function characterTopValue(character: RegularCharacter): number {
-  let total = 0;
-  for (let i = 0; i < character.length; i++) {
-    total += barTopValue(character[i]) * weights[i];
-  }
-  return total;
+  return sum(
+    character.map((char, index) => barTopValue(char) * weights[index])
+  );
 }
 
 export function characterBottomValue(character: RegularCharacter): number {
-  let total = 0;
-  for (let i = 0; i < character.length; i++) {
-    total += barBottomValue(character[i]) * weights[i];
-  }
-  return total;
+  return sum(
+    character.map((char, index) => barBottomValue(char) * weights[index])
+  );
 }
 
 function lookupBar(extendTop: boolean, extendBottom: boolean): Bar {
@@ -133,16 +129,10 @@ function shouldExtend(sum: number): [boolean, boolean, boolean, boolean] {
 }
 
 export function checksum(characters: RegularCharacter[]): RegularCharacter {
-  let top = 0;
-  let bottom = 0;
-
-  for (let i = 0; i < characters.length; i++) {
-    const character = characters[i];
-    top += characterTopValue(character);
-    bottom += characterBottomValue(character);
-  }
-
+  let top = sum(characters.map(characterTopValue));
   let topExtensions = shouldExtend(top);
+
+  let bottom = sum(characters.map(characterBottomValue));
   let bottomExtensions = shouldExtend(bottom);
 
   return [
@@ -167,4 +157,86 @@ export function buildBarcode(input: string): Bar[] {
     checksum(characters),
     specialCharacterMap[SpecialCharacters.STOP],
   ].flat();
+}
+
+export function validateData() {
+  const chars = Object.values(regularCharacterMap);
+  const setChars = new Set<string>();
+
+  chars.forEach((char) => {
+    if (char.length !== 4) {
+      throw new Error("Invalid character length");
+    }
+
+    let topSum = sum(char.map(barTopValue));
+    if (topSum !== 2) {
+      throw new Error("Character should extend up twice");
+    }
+
+    let bottomSum = sum(char.map(barTopValue));
+    if (bottomSum !== 2) {
+      throw new Error("Character should extend down twice");
+    }
+
+    setChars.add(char.join(""));
+  });
+
+  if (Array.from(setChars).length !== chars.length) {
+    throw new Error("Characters were not unique");
+  }
+
+  const sampleInput = "BX11LT1A";
+  const sampleOutput = `UP
+DOWN
+LONG
+SHORT
+UP
+LONG
+UP
+SHORT
+DOWN
+SHORT
+DOWN
+UP
+LONG
+SHORT
+DOWN
+UP
+LONG
+LONG
+SHORT
+SHORT
+LONG
+LONG
+DOWN
+UP
+SHORT
+SHORT
+DOWN
+UP
+LONG
+DOWN
+UP
+DOWN
+UP
+UP
+SHORT
+DOWN
+LONG
+LONG`;
+
+  const sample = buildBarcode(sampleInput).join("\n");
+  if (sample !== sampleOutput) {
+    throw new Error("Sample was not valid");
+  }
+
+  console.log("Barcode data validated");
+}
+
+function sum(array: number[]): number {
+  let result = 0;
+  for (let i = 0; i < array.length; i++) {
+    result += array[i];
+  }
+  return result;
 }

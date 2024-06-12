@@ -1,9 +1,10 @@
 import React from "react";
-import { buildBarcode } from "./rm4scc";
+import { buildBarcode, validateData } from "./rm4scc";
 
 import classes from "./barcode.module.css";
 
 export function Barcode({ barcode }: { barcode: string }) {
+  validateData();
   const bars = buildBarcode(barcode);
   return (
     <div className={classes.barcode}>
