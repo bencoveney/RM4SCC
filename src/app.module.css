@@ -1,14 +1,28 @@
 .wrapper {
-  display: flex;
   border-radius: 2rem;
   overflow: hidden;
   box-shadow: 0 0.5rem 3rem #174b4b;
+  min-height: 37rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto;
+  grid-template-areas:
+    "input render"
+    "preview preview";
 }
 
-.controls {
+.input,
+.render {
   background-color: #dcf9f8;
   padding: 2rem;
-  flex: 1 0 auto;
+  min-width: 20rem;
+}
+
+.input {
+  grid-area: input;
+}
+.render {
+  grid-area: render;
 }
 
 .preview {
@@ -17,7 +31,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 35rem;
-  min-height: 35rem;
-  flex: 1 1 auto;
+  height: 5rem;
+  grid-area: preview;
+}
+
+.preview > * {
+  display: block;
+  width: auto;
+  max-height: 100%;
+  max-width: 100%;
 }

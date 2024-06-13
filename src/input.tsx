@@ -1,6 +1,5 @@
 import React, {
   ChangeEvent,
-  PropsWithChildren,
   ReactElement,
   useCallback,
   useEffect,
@@ -8,7 +7,8 @@ import React, {
 } from "react";
 import { Barcode, buildBarcode } from "./rm4scc";
 
-import classes from "./input.module.css";
+import { Button, Buttons, FieldGroup, Form, Labeled, Note } from "./form";
+import { Subheading } from "./heading";
 
 const modePostcodeDps = "PostcodeDPS";
 const modePostcode = "Postcode";
@@ -71,58 +71,45 @@ export function Input({ setValue }: { setValue: (value: Barcode) => void }) {
   ]);
 
   return (
-    <form className={classes.form}>
-      <FieldGroup label="Preset">{preset.element}</FieldGroup>
-      <FieldGroup label="Input Mode">
-        <Labeled label="Postcode and DPS">
-          {mode.elements[modePostcodeDps]}
-        </Labeled>
-        <Labeled label="Postcode">{mode.elements[modePostcode]}</Labeled>
-        <Labeled label="Arbitrary Data">{mode.elements[modeArbitrary]}</Labeled>
-      </FieldGroup>
-      <FieldGroup label="Input">
-        {mode.value === modePostcodeDps && (
-          <>
-            <Labeled label="Postcode">{postcode.element}</Labeled>
-            <Labeled label="DPS">{deliveryPointSuffix.element}</Labeled>
-          </>
-        )}
-        {mode.value === modePostcode && (
-          <>
-            <Labeled label="Postcode">{postcode.element}</Labeled>
-            <Note>A default DPS code of 9Z will be used</Note>
-          </>
-        )}
-        {mode.value === modeArbitrary && (
-          <Labeled label="Value">{arbitrary.element}</Labeled>
-        )}
-      </FieldGroup>
-      <FieldGroup label="Extras">
-        <Note>Required for a valid barcode</Note>
-        <Labeled label="Include Terminators">{terminators.element}</Labeled>
-        <Note>Include the leading and trailing special characters</Note>
-        <Labeled label="Include Checksum">{checksum.element}</Labeled>
-        <Note>Include a checksum of the input value</Note>
-      </FieldGroup>
-    </form>
-  );
-}
-
-function FieldGroup({ children, label }: PropsWithChildren<{ label: string }>) {
-  return (
-    <fieldset className={classes.group}>
-      <legend className={classes.legend}>{label}</legend>
-      {children}
-    </fieldset>
-  );
-}
-
-function Labeled({ children, label }: PropsWithChildren<{ label: string }>) {
-  return (
-    <label className={`${classes.row} ${classes.split}`}>
-      <span className={classes.label}>{label}</span>
-      {children}
-    </label>
+    <>
+      <Subheading>Input</Subheading>
+      <Form>
+        <FieldGroup label="Preset">{preset.element}</FieldGroup>
+        <FieldGroup label="Input Mode">
+          <Labeled label="Postcode and DPS">
+            {mode.elements[modePostcodeDps]}
+          </Labeled>
+          <Labeled label="Postcode">{mode.elements[modePostcode]}</Labeled>
+          <Labeled label="Arbitrary Data">
+            {mode.elements[modeArbitrary]}
+          </Labeled>
+        </FieldGroup>
+        <FieldGroup label="Input">
+          {mode.value === modePostcodeDps && (
+            <>
+              <Labeled label="Postcode">{postcode.element}</Labeled>
+              <Labeled label="DPS">{deliveryPointSuffix.element}</Labeled>
+            </>
+          )}
+          {mode.value === modePostcode && (
+            <>
+              <Labeled label="Postcode">{postcode.element}</Labeled>
+              <Note>A default DPS code of 9Z will be used</Note>
+            </>
+          )}
+          {mode.value === modeArbitrary && (
+            <Labeled label="Value">{arbitrary.element}</Labeled>
+          )}
+        </FieldGroup>
+        <FieldGroup label="Extras">
+          <Note>Required for a valid barcode</Note>
+          <Labeled label="Include Terminators">{terminators.element}</Labeled>
+          <Note>Include leading and trailing characters</Note>
+          <Labeled label="Include Checksum">{checksum.element}</Labeled>
+          <Note>Include a checksum of the input value</Note>
+        </FieldGroup>
+      </Form>
+    </>
   );
 }
 
@@ -204,10 +191,6 @@ function useRadioButtons({
   return { elements, value };
 }
 
-function Note({ children }: PropsWithChildren) {
-  return <p className={`${classes.row} ${classes.note}`}>{children}</p>;
-}
-
 const postcodePreset: Preset = {
   name: "Sample Postcode",
   mode: modePostcodeDps,
@@ -242,35 +225,32 @@ function usePresetButtons() {
   const [defaults, setDefaults] = useState<Preset>(postcodePreset);
   return {
     element: (
-      <div className={`${classes.row} ${classes.buttons}`}>
-        <button
-          className={classes.button}
+      <Buttons>
+        <Button
           onClick={(event) => {
             event.preventDefault();
             setDefaults(postcodePreset);
           }}
         >
           {postcodePreset.name}
-        </button>
-        <button
-          className={classes.button}
+        </Button>
+        <Button
           onClick={(event) => {
             event.preventDefault();
             setDefaults(benPreset);
           }}
         >
           {benPreset.name}
-        </button>
-        <button
-          className={classes.button}
+        </Button>
+        <Button
           onClick={(event) => {
             event.preventDefault();
             setDefaults(emptyPreset);
           }}
         >
           {emptyPreset.name}
-        </button>
-      </div>
+        </Button>
+      </Buttons>
     ),
     defaults,
   };

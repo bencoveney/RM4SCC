@@ -1,67 +1,79 @@
 import React from "react";
 import { Bar, Barcode as BarcodeType } from "./rm4scc";
+import { RenderSpec, limits } from "./render";
+import { round } from "./utils";
 
-export function Barcode({ barcode }: { barcode: BarcodeType }) {
+function clamp(value: number) {
+  return round(value, 3);
+}
+
+export function Barcode({
+  barcode,
+  renderSpec,
+}: {
+  barcode: BarcodeType;
+  renderSpec: RenderSpec;
+}) {
+  if (!renderSpec) {
+    return null;
+  }
+  const { barWidth, ascDescHeight, trackHeight, density } = renderSpec;
+
+  const spacePerBar = limits.densityRange / density;
+  const gapWidth = spacePerBar - barWidth;
+
   const numBars = barcode.length;
   const numGaps = numBars - 1;
-  const barWidth = 0.6;
-  const gapWidth = 1 - barWidth;
-  const ascenderDescenderHeight = 2.16; // 1.6 -> 2.16
-  const trackHeight = 1.52; // 1.02 -> 1.52
-  const height = ascenderDescenderHeight * 2 + trackHeight;
-  const imageWidth = numBars * barWidth + numGaps * gapWidth;
+
+  const width = barWidth * numBars + gapWidth * numGaps;
+  const height = ascDescHeight + trackHeight + ascDescHeight;
+
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      viewBox={`0 0 ${imageWidth} ${height}`}
+      viewBox={`0 0 ${clamp(width)} ${clamp(height)}`}
     >
       {barcode.map((bar, index) => {
-        const x = index * (barWidth + gapWidth);
+        const x = clamp(index * (barWidth + gapWidth));
         switch (bar) {
           case Bar.SHORT:
             return (
               <rect
-                x={x}
-                y={ascenderDescenderHeight}
-                width={barWidth}
-                height={trackHeight}
+                x={clamp(x)}
+                y={clamp(ascDescHeight)}
+                width={clamp(barWidth)}
+                height={clamp(trackHeight)}
               />
             );
           case Bar.UP:
             return (
               <rect
-                x={x}
-                y={0}
-                width={barWidth}
-                height={ascenderDescenderHeight + trackHeight}
+                x={clamp(x)}
+                y={clamp(0)}
+                width={clamp(barWidth)}
+                height={clamp(ascDescHeight + trackHeight)}
               />
             );
           case Bar.DOWN:
             return (
               <rect
-                x={x}
-                y={ascenderDescenderHeight}
-                width={barWidth}
-                height={ascenderDescenderHeight + trackHeight}
+                x={clamp(x)}
+                y={clamp(ascDescHeight)}
+                width={clamp(barWidth)}
+                height={clamp(ascDescHeight + trackHeight)}
               />
             );
           case Bar.LONG:
-            return <rect x={x} y={0} width={barWidth} height={height} />;
+            return (
+              <rect
+                x={clamp(x)}
+                y={clamp(0)}
+                width={clamp(barWidth)}
+                height={clamp(height)}
+              />
+            );
         }
       })}
     </svg>
   );
 }
-
-export const render = {
-  clearZone: 2,
-  minBarWidth: 0.38,
-  maxBarWidth: 0.63,
-  ascDescMinHeight: 1.6,
-  ascDescMaxHeight: 2.16,
-  trackMinHeight: 1.02,
-  trackMaxHeight: 1.52,
-  densityRange: 25.4,
-  minDensity: 20, // Bars per densityRange
-  maxDensity: 24, // Bars per densityRange
-};

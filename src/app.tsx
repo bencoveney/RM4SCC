@@ -5,6 +5,8 @@ import { Input } from "./input";
 import { Barcode as BarcodeType } from "./rm4scc";
 
 import classes from "./app.module.css";
+import { Render, RenderSpec } from "./render";
+import { Title } from "./heading";
 
 export function initApp() {
   const rootElement = document.getElementById("react-root");
@@ -17,14 +19,21 @@ export function initApp() {
 
 function App() {
   const [barcode, setBarcode] = useState<BarcodeType>([]);
+  const [renderSpec, setRenderSpec] = useState<RenderSpec | null>(null);
   return (
-    <div className={classes.wrapper}>
-      <div className={classes.controls}>
-        <Input setValue={setBarcode} />
+    <>
+      <Title>RM4SCC Barcodes</Title>
+      <div className={classes.wrapper}>
+        <div className={classes.input}>
+          <Input setValue={setBarcode} />
+        </div>
+        <div className={classes.preview}>
+          {renderSpec && <Barcode barcode={barcode} renderSpec={renderSpec} />}
+        </div>
+        <div className={classes.render}>
+          <Render setRenderSpec={setRenderSpec} />
+        </div>
       </div>
-      <div className={classes.preview}>
-        <Barcode barcode={barcode} />
-      </div>
-    </div>
+    </>
   );
 }

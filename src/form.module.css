@@ -12,22 +12,6 @@
 .legend {
   font-weight: bold;
   color: #174b4b;
-  margin-bottom: 0.5rem;
-}
-
-.row {
-  margin-top: 0.5rem;
-  display: flex;
-}
-
-.split {
-  justify-content: space-between;
-}
-
-.label {
-}
-
-.field {
 }
 
 .note {
@@ -37,8 +21,23 @@
   margin-bottom: 0.5rem;
 }
 
+.row {
+  margin-top: 0.5rem;
+  display: flex;
+}
+
+.labelHorizontal {
+  justify-content: space-between;
+}
+
+.labelVertical {
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
 .buttons {
   justify-content: space-evenly;
+  gap: 1rem;
 }
 
 .button {
@@ -48,4 +47,10 @@
   background-color: #174b4b;
   color: #ffffff;
   border: 0;
+}
+
+.label {
+}
+
+.field {
 }
