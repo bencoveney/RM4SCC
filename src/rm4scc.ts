@@ -49,8 +49,8 @@ export const regularCharacterMap: Record<string, RegularCharacter> = {
 };
 
 export const enum SpecialCharacters {
-  START,
-  STOP,
+  START, // (
+  STOP, // )
 }
 
 export type SpecialCharacter = [Bar];
