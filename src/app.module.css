@@ -1,7 +1,7 @@
 .wrapper {
   border-radius: 2rem;
   overflow: hidden;
-  box-shadow: 0 0.5rem 3rem #174b4b;
+  box-shadow: 0 1rem 3rem #174b4b;
   min-height: 37rem;
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -40,4 +40,5 @@
   width: auto;
   max-height: 100%;
   max-width: 100%;
+  flex-grow: 1;
 }

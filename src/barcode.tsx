@@ -133,7 +133,7 @@ export function Barcode({
 }
 
 const duration = 0.5;
-const pause = 1;
+const pause = 0.75;
 
 function Animation({
   index,
