@@ -150,13 +150,16 @@ export function buildBarcode(
   includeTerminators: boolean,
   includeChecksum: boolean
 ): Barcode {
-  const characters = input.split("").map((char) => {
-    const found = regularCharacterMap[char.toUpperCase()];
-    if (!found) {
-      throw new Error(`Unexpected character ${char}`);
-    }
-    return found;
-  });
+  const characters = input
+    .split("")
+    .map((char) => {
+      const found = regularCharacterMap[char.toUpperCase()];
+      if (!found) {
+        console.error(`Unexpected character ${char}`);
+      }
+      return found;
+    })
+    .filter(Boolean);
   return [
     includeTerminators ? specialCharacterMap[SpecialCharacters.START] : [],
     ...characters,
