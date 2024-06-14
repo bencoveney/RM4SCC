@@ -28,6 +28,22 @@ export function Barcode({
   const width = barWidth * numBars + gapWidth * numGaps;
   const height = ascDescHeight + trackHeight + ascDescHeight;
 
+  // Prevent elements hanging around - the animations get out of sync
+  const uniquifier = barcode.map((bar) => {
+    switch (bar) {
+      case Bar.SHORT:
+        return "s";
+      case Bar.UP:
+        return "u";
+      case Bar.DOWN:
+        return "d";
+      case Bar.LONG:
+        return "l";
+      default:
+        return "?";
+    }
+  });
+
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -43,7 +59,17 @@ export function Barcode({
                 y={clamp(ascDescHeight)}
                 width={clamp(barWidth)}
                 height={clamp(trackHeight)}
-              />
+                key={`${index}${uniquifier}`}
+              >
+                {renderSpec.animate && (
+                  <Animation
+                    index={index}
+                    total={numBars}
+                    height={[clamp(trackHeight), clamp(height)]}
+                    y={[clamp(ascDescHeight), clamp(0)]}
+                  />
+                )}
+              </rect>
             );
           case Bar.UP:
             return (
@@ -52,7 +78,16 @@ export function Barcode({
                 y={clamp(0)}
                 width={clamp(barWidth)}
                 height={clamp(ascDescHeight + trackHeight)}
-              />
+                key={`${index}${uniquifier}`}
+              >
+                {renderSpec.animate && (
+                  <Animation
+                    index={index}
+                    total={numBars}
+                    height={[clamp(ascDescHeight + trackHeight), clamp(height)]}
+                  />
+                )}
+              </rect>
             );
           case Bar.DOWN:
             return (
@@ -61,7 +96,17 @@ export function Barcode({
                 y={clamp(ascDescHeight)}
                 width={clamp(barWidth)}
                 height={clamp(ascDescHeight + trackHeight)}
-              />
+                key={`${index}${uniquifier}`}
+              >
+                {renderSpec.animate && (
+                  <Animation
+                    index={index}
+                    total={numBars}
+                    height={[clamp(ascDescHeight + trackHeight), clamp(height)]}
+                    y={[clamp(ascDescHeight), clamp(0)]}
+                  />
+                )}
+              </rect>
             );
           case Bar.LONG:
             return (
@@ -70,10 +115,69 @@ export function Barcode({
                 y={clamp(0)}
                 width={clamp(barWidth)}
                 height={clamp(height)}
-              />
+                key={`${index}${uniquifier}`}
+              >
+                {renderSpec.animate && (
+                  <Animation
+                    index={index}
+                    total={numBars}
+                    height={[clamp(height), clamp(height)]}
+                  />
+                )}
+              </rect>
             );
         }
       })}
     </svg>
+  );
+}
+
+const duration = 0.5;
+const pause = 1;
+
+function Animation({
+  index,
+  total,
+  height,
+  y,
+}: {
+  index: number;
+  total: number;
+  height?: [number, number];
+  y?: [number, number];
+}) {
+  const startOffset = (index / total) * duration;
+
+  const totalTime = pause + duration;
+  const end = clamp(duration / totalTime);
+  const midpoint = clamp(end / 2);
+
+  return (
+    <>
+      {height && (
+        <animate
+          attributeName="height"
+          from={height[0]}
+          to={height[1]}
+          values={`${height[0]}; ${height[1]}; ${height[0]}; ${height[0]}`}
+          keyTimes={`0; ${midpoint}; ${end}; 1`}
+          dur={`${totalTime}s`}
+          begin={`${startOffset}s`}
+          repeatCount="indefinite"
+        />
+      )}
+      {y && (
+        <animate
+          attributeName="y"
+          from={y[0]}
+          to={y[1]}
+          values={`${y[0]}; ${y[1]}; ${y[0]}; ${y[0]}`}
+          keyTimes={`0; ${midpoint}; ${end}; 1`}
+          dur={`${totalTime}s`}
+          begin={`${startOffset}s`}
+          repeatCount="indefinite"
+        />
+      )}
+    </>
   );
 }

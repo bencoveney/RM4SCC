@@ -4,6 +4,7 @@ import { Subheading } from "./heading";
 import { round } from "./utils";
 
 import classes from "./render.module.css";
+import { useCheckbox } from "./input";
 
 type Range = [number, number, number, string]; // min, max, step, unit
 
@@ -23,6 +24,7 @@ export type RenderSpec = {
   ascDescHeight: number;
   trackHeight: number;
   density: number;
+  animate: boolean;
 };
 
 export function Render({
@@ -34,6 +36,7 @@ export function Render({
   const ascDescHeight = useSlider(limits.ascDescHeight);
   const trackHeight = useSlider(limits.trackHeight);
   const density = useSlider(limits.density);
+  const animate = useCheckbox({ defaultChecked: false });
 
   useEffect(() => {
     setRenderSpec({
@@ -41,8 +44,15 @@ export function Render({
       ascDescHeight: ascDescHeight.value,
       trackHeight: trackHeight.value,
       density: density.value,
+      animate: animate.checked,
     });
-  }, [barWidth.value, ascDescHeight.value, trackHeight.value, density.value]);
+  }, [
+    barWidth.value,
+    ascDescHeight.value,
+    trackHeight.value,
+    density.value,
+    animate.checked,
+  ]);
 
   return (
     <>
@@ -60,6 +70,7 @@ export function Render({
         <Labeled label={`Density (per ${limits.densityRange}mm)`} vertical>
           {density.element}
         </Labeled>
+        <Labeled label="Animate">{animate.element}</Labeled>
       </Form>
     </>
   );

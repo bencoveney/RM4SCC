@@ -20,5 +20,6 @@ RM4SCC barcodes
 https://loading.io/
 https://cssloaders.github.io/
 https://en.wikipedia.org/wiki/Throbber
+https://css-tricks.com/guide-svg-animations-smil/
 https://css-tricks.com/animating-svg-css/
 https://css-tricks.com/how-i-made-a-generator-for-svg-loaders-with-sass-and-smil-options/

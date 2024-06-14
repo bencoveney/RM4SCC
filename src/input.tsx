@@ -113,7 +113,7 @@ export function Input({ setValue }: { setValue: (value: Barcode) => void }) {
   );
 }
 
-function useCheckbox({ defaultChecked }: { defaultChecked: boolean }) {
+export function useCheckbox({ defaultChecked }: { defaultChecked: boolean }) {
   const [checked, setChecked] = useState(defaultChecked);
 
   useEffect(() => {
