@@ -53,13 +53,13 @@ export function Barcode({
         style: { width: "5rem", height: "5rem", flexGrow: 0 },
       };
       break;
-    case "real":
+    case "real_size":
       displayProps = {
         width: `${width}mm`,
         height: `${height}mm`,
       };
       break;
-    case "scale":
+    case "scale_to_fit":
     default:
       break;
   }

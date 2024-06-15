@@ -38,8 +38,8 @@ export function Render({
   const trackHeight = useSlider(limits.trackHeight);
   const density = useSlider(limits.density);
   const display = useSelect({
-    defaultValue: "scale",
-    values: ["scale", "real", "force_square"],
+    defaultValue: "scale_to_fit",
+    values: ["scale_to_fit", "real_size", "force_square"],
   });
   const animate = useCheckbox({ defaultChecked: false });
 

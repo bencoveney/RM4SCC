@@ -22,7 +22,7 @@ function App() {
   const [renderSpec, setRenderSpec] = useState<RenderSpec | null>(null);
   return (
     <>
-      <Title>RM4SCC Barcodes</Title>
+      <Title>RM4SCC Barcode Generator</Title>
       <div className={classes.wrapper}>
         <div className={classes.input}>
           <Input setValue={setBarcode} />
