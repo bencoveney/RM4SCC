@@ -4,7 +4,11 @@ import { PropsWithChildren } from "react";
 import classes from "./form.module.css";
 
 export function Form({ children }: PropsWithChildren) {
-  return <form className={classes.form}>{children}</form>;
+  return (
+    <form className={classes.form} onSubmit={(event) => event.preventDefault()}>
+      {children}
+    </form>
+  );
 }
 
 export function FieldGroup({
