@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { Form, Labeled } from "./form";
 import { Subheading } from "./heading";
-import { round } from "./utils";
+import { capitaliseSnakeCase, round } from "./utils";
 
 import classes from "./render.module.css";
 import { useCheckbox } from "./input";
@@ -151,15 +151,11 @@ function useSelect({
       <select onChange={onChange} value={value}>
         {values.map((value) => (
           <option key={value} value={value}>
-            {value.split("_").map(capitalise).join(" ")}
+            {capitaliseSnakeCase(value)}
           </option>
         ))}
       </select>
     ),
     value,
   };
-}
-
-function capitalise(word: string) {
-  return `${word[0].toUpperCase()}${word.slice(1)}`;
 }

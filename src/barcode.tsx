@@ -1,11 +1,7 @@
 import React from "react";
 import { Bar, Barcode as BarcodeType } from "./rm4scc";
 import { RenderSpec, limits } from "./render";
-import { round } from "./utils";
-
-function clamp(value: number) {
-  return round(value, 3);
-}
+import { clamp } from "./utils";
 
 export function Barcode({
   barcode,
@@ -55,8 +51,8 @@ export function Barcode({
       break;
     case "real_size":
       displayProps = {
-        width: `${width}mm`,
-        height: `${height}mm`,
+        width: `${clamp(width)}mm`,
+        height: `${clamp(height)}mm`,
       };
       break;
     case "scale_to_fit":
