@@ -11,9 +11,6 @@ RM4SCC barcodes
 - V looks like a cow
 - X looks like a chair
 - 2 looks like a toilet
-- How many of them
-  - Are symmetrical
-  - Only use short/long
 
 ## References
 
@@ -23,3 +20,4 @@ https://en.wikipedia.org/wiki/Throbber
 https://css-tricks.com/guide-svg-animations-smil/
 https://css-tricks.com/animating-svg-css/
 https://css-tricks.com/how-i-made-a-generator-for-svg-loaders-with-sass-and-smil-options/
+https://css-tricks.com/scale-svg/

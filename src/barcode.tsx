@@ -17,7 +17,8 @@ export function Barcode({
   if (!renderSpec) {
     return null;
   }
-  const { barWidth, ascDescHeight, trackHeight, density } = renderSpec;
+  const { barWidth, ascDescHeight, trackHeight, density, display, animate } =
+    renderSpec;
 
   const spacePerBar = limits.densityRange / density;
   const gapWidth = spacePerBar - barWidth;
@@ -44,10 +45,30 @@ export function Barcode({
     }
   });
 
+  let displayProps: React.SVGProps<SVGSVGElement> = {};
+  switch (display) {
+    case "force_square":
+      displayProps = {
+        preserveAspectRatio: "none",
+        style: { width: "5rem", height: "5rem", flexGrow: 0 },
+      };
+      break;
+    case "real":
+      displayProps = {
+        width: `${width}mm`,
+        height: `${height}mm`,
+      };
+      break;
+    case "scale":
+    default:
+      break;
+  }
+
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox={`0 0 ${clamp(width)} ${clamp(height)}`}
+      {...displayProps}
     >
       {barcode.map((bar, index) => {
         const x = clamp(index * (barWidth + gapWidth));
@@ -61,7 +82,7 @@ export function Barcode({
                 height={clamp(trackHeight)}
                 key={`${index}${uniquifier}`}
               >
-                {renderSpec.animate && (
+                {animate && (
                   <Animation
                     index={index}
                     total={numBars}
@@ -80,7 +101,7 @@ export function Barcode({
                 height={clamp(ascDescHeight + trackHeight)}
                 key={`${index}${uniquifier}`}
               >
-                {renderSpec.animate && (
+                {animate && (
                   <Animation
                     index={index}
                     total={numBars}
@@ -98,7 +119,7 @@ export function Barcode({
                 height={clamp(ascDescHeight + trackHeight)}
                 key={`${index}${uniquifier}`}
               >
-                {renderSpec.animate && (
+                {animate && (
                   <Animation
                     index={index}
                     total={numBars}
@@ -117,7 +138,7 @@ export function Barcode({
                 height={clamp(height)}
                 key={`${index}${uniquifier}`}
               >
-                {renderSpec.animate && (
+                {animate && (
                   <Animation
                     index={index}
                     total={numBars}

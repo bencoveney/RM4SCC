@@ -1,5 +1,5 @@
 .wrapper {
-  border-radius: 2rem;
+  border-radius: 1rem;
   overflow: hidden;
   box-shadow: 0 1rem 3rem #174b4b;
   min-height: 37rem;
@@ -14,7 +14,7 @@
 .input,
 .render {
   background-color: #dcf9f8;
-  padding: 2rem;
+  padding: 1rem 2rem;
   min-width: 20rem;
 }
 

@@ -24,6 +24,7 @@ export type RenderSpec = {
   ascDescHeight: number;
   trackHeight: number;
   density: number;
+  display: string;
   animate: boolean;
 };
 
@@ -36,6 +37,10 @@ export function Render({
   const ascDescHeight = useSlider(limits.ascDescHeight);
   const trackHeight = useSlider(limits.trackHeight);
   const density = useSlider(limits.density);
+  const display = useSelect({
+    defaultValue: "scale",
+    values: ["scale", "real", "force_square"],
+  });
   const animate = useCheckbox({ defaultChecked: false });
 
   useEffect(() => {
@@ -44,6 +49,7 @@ export function Render({
       ascDescHeight: ascDescHeight.value,
       trackHeight: trackHeight.value,
       density: density.value,
+      display: display.value,
       animate: animate.checked,
     });
   }, [
@@ -51,6 +57,7 @@ export function Render({
     ascDescHeight.value,
     trackHeight.value,
     density.value,
+    display.value,
     animate.checked,
   ]);
 
@@ -70,6 +77,7 @@ export function Render({
         <Labeled label={`Density (per ${limits.densityRange}mm)`} vertical>
           {density.element}
         </Labeled>
+        <Labeled label="Display">{display.element}</Labeled>
         <Labeled label="Animate">{animate.element}</Labeled>
       </Form>
     </>
@@ -116,4 +124,42 @@ function useSlider(range: Range) {
       </>
     ),
   };
+}
+
+function useSelect({
+  values,
+  defaultValue,
+}: {
+  values: string[];
+  defaultValue: string;
+}) {
+  const [value, setValue] = useState(defaultValue);
+
+  useEffect(() => {
+    setValue(defaultValue);
+  }, [setValue, defaultValue]);
+
+  const onChange = useCallback(
+    (event: ChangeEvent<HTMLSelectElement>) => {
+      setValue(event.target.value);
+    },
+    [setValue]
+  );
+
+  return {
+    element: (
+      <select onChange={onChange} value={value}>
+        {values.map((value) => (
+          <option key={value} value={value}>
+            {value.split("_").map(capitalise).join(" ")}
+          </option>
+        ))}
+      </select>
+    ),
+    value,
+  };
+}
+
+function capitalise(word: string) {
+  return `${word[0].toUpperCase()}${word.slice(1)}`;
 }
